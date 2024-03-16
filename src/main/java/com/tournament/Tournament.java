@@ -18,7 +18,7 @@ public class Tournament {
 
 	private String tournamentName;
 	private HashSet<Team> tournamentTeams;
-	private HashSet<Venue> tournamentVenues;
+	private HashSet<Ground> tournamentVenues;
 	private ArrayList<Match> matches;
 	private int totalNumberOfTeams;
 	private int totalNumberOfVenues;
@@ -45,12 +45,12 @@ public class Tournament {
 		if(totNoVenues>0)
 		{
 			this.totalNumberOfVenues = totNoVenues;
-			this.tournamentVenues = new HashSet<Venue>(this.totalNumberOfVenues);
+			this.tournamentVenues = new HashSet<Ground>(this.totalNumberOfVenues);
 		}
 		else
 		{
 			this.totalNumberOfVenues = 0;
-			this.tournamentVenues = new HashSet<Venue>();
+			this.tournamentVenues = new HashSet<Ground>();
 		}
 		
 		this.matches = new ArrayList<Match>();
@@ -132,22 +132,24 @@ public class Tournament {
 
 	// Cannot keep the method getTournamentVenues() public because Venue class is accessible only within the package, not outside the package.
 	// public HashSet<Venue> getTournamentVenues() {
-	HashSet<Venue> getTournamentVenues() {
+	HashSet<Ground> getTournamentVenues() {
 		return tournamentVenues;
 	}
 
-	private void setTournamentVenues(HashSet<Venue> tournamentVenues)	// Hidden Method
+	private void setTournamentVenues(HashSet<Ground> tournamentVenues)	// Hidden Method
 	{
 		this.tournamentVenues = tournamentVenues;
 	}
 	
 	public void setTournamentVenues(ArrayList<String> tournamentVenueNames)	// Exposed Method
 	{
-		HashSet<Venue> tournamentVenueSet = new HashSet<Venue>();
+		HashSet<Ground> tournamentVenueSet = new HashSet<Ground>();
 		
 		for(String venueName: tournamentVenueNames)
 		{
-			tournamentVenueSet.add(new Venue(venueName));
+			Ground venue = new Ground();
+			venue.setGroundName(venueName);
+			tournamentVenueSet.add(venue);
 		}
 		this.setTournamentVenues(tournamentVenueSet);
 	}
@@ -199,7 +201,7 @@ public class Tournament {
 	}
 	
 	
-	private void addVenue(Venue venue)  // Hidden Method
+	private void addVenue(Ground venue)  // Hidden Method
 	{
 		if(this.tournamentVenues.size()==this.totalNumberOfVenues)
 			this.totalNumberOfVenues = this.totalNumberOfVenues+1;
@@ -207,11 +209,11 @@ public class Tournament {
 		this.tournamentVenues.add(venue);
 	}
 
-	public Venue getVenue(String venueName)  // Exposed Method
+	public Ground getVenue(String venueName)  // Exposed Method
 	{
-		for(Venue venue: this.tournamentVenues)
+		for(Ground venue: this.tournamentVenues)
 		{
-			if(venue.getVenueName().equals(venueName))
+			if(venue.getGroundName().equals(venueName))
 			{
 				return venue;
 			}
@@ -221,10 +223,12 @@ public class Tournament {
 	
 	public void addVenue(String venueName)  // Exposed Method
 	{
-		this.addVenue(new Venue(venueName));
+		Ground ground = new Ground();
+		ground.setGroundName(venueName);
+		this.addVenue(ground);
 	}
 	
-	private boolean removeVenue(Venue venue)  // Hidden Method
+	private boolean removeVenue(Ground venue)  // Hidden Method
 	{
 		if(venue!=null)
 		{
@@ -243,11 +247,8 @@ public class Tournament {
 			return false;
 		}
 	}
-	
-	public boolean removeVenue(String venueName)  // Exposed Method
-	{
-		return this.removeVenue(new Venue(venueName));
-	}
+
+
 	
 	public ArrayList<Match> getMatches(int numberOfSlotsPerGround)
 	{
